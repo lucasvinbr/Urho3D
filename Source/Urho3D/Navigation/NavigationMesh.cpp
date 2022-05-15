@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #include "../Precompiled.h"
 
@@ -30,7 +11,7 @@
 #include "../Graphics/Model.h"
 #include "../Graphics/StaticModel.h"
 #include "../Graphics/TerrainPatch.h"
-#include "../Graphics/VertexBuffer.h"
+#include "../GraphicsAPI/VertexBuffer.h"
 #include "../IO/Log.h"
 #include "../IO/MemoryBuffer.h"
 #include "../Navigation/CrowdAgent.h"
@@ -619,7 +600,7 @@ Vector3 NavigationMesh::FindNearestPoint(const Vector3& point, const Vector3& ex
     dtPolyRef pointRef;
     if (!nearestRef)
         nearestRef = &pointRef;
-    navMeshQuery_->findNearestPoly(&localPoint.x_, &extents.x_, filter ? filter : queryFilter_.Get(), nearestRef, &nearestPoint.x_);
+    navMeshQuery_->findNearestPoly(&localPoint.x_, &extents.x_, filter ? filter : queryFilter_.get(), nearestRef, &nearestPoint.x_);
     return *nearestRef ? transform * nearestPoint : point;
 }
 
@@ -635,7 +616,7 @@ Vector3 NavigationMesh::MoveAlongSurface(const Vector3& start, const Vector3& en
     Vector3 localStart = inverse * start;
     Vector3 localEnd = inverse * end;
 
-    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.Get();
+    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.get();
     dtPolyRef startRef;
     navMeshQuery_->findNearestPoly(&localStart.x_, &extents.x_, queryFilter, &startRef, nullptr);
     if (!startRef)
@@ -677,7 +658,7 @@ void NavigationMesh::FindPath(PODVector<NavigationPathPoint>& dest, const Vector
     Vector3 localStart = inverse * start;
     Vector3 localEnd = inverse * end;
 
-    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.Get();
+    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.get();
     dtPolyRef startRef;
     dtPolyRef endRef;
     navMeshQuery_->findNearestPoly(&localStart.x_, &extents.x_, queryFilter, &startRef, nullptr);
@@ -745,7 +726,7 @@ Vector3 NavigationMesh::GetRandomPoint(const dtQueryFilter* filter, dtPolyRef* r
     dtPolyRef polyRef;
     Vector3 point(Vector3::ZERO);
 
-    navMeshQuery_->findRandomPoint(filter ? filter : queryFilter_.Get(), Random, randomRef ? randomRef : &polyRef, &point.x_);
+    navMeshQuery_->findRandomPoint(filter ? filter : queryFilter_.get(), Random, randomRef ? randomRef : &polyRef, &point.x_);
 
     return node_->GetWorldTransform() * point;
 }
@@ -763,7 +744,7 @@ Vector3 NavigationMesh::GetRandomPointInCircle(const Vector3& center, float radi
     Matrix3x4 inverse = transform.Inverse();
     Vector3 localCenter = inverse * center;
 
-    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.Get();
+    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.get();
     dtPolyRef startRef;
     navMeshQuery_->findNearestPoly(&localCenter.x_, &extents.x_, queryFilter, &startRef, nullptr);
     if (!startRef)
@@ -794,7 +775,7 @@ float NavigationMesh::GetDistanceToWall(const Vector3& point, float radius, cons
     Matrix3x4 inverse = transform.Inverse();
     Vector3 localPoint = inverse * point;
 
-    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.Get();
+    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.get();
     dtPolyRef startRef;
     navMeshQuery_->findNearestPoly(&localPoint.x_, &extents.x_, queryFilter, &startRef, nullptr);
     if (!startRef)
@@ -827,7 +808,7 @@ Vector3 NavigationMesh::Raycast(const Vector3& start, const Vector3& end, const 
     Vector3 localStart = inverse * start;
     Vector3 localEnd = inverse * end;
 
-    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.Get();
+    const dtQueryFilter* queryFilter = filter ? filter : queryFilter_.get();
     dtPolyRef startRef;
     navMeshQuery_->findNearestPoly(&localStart.x_, &extents.x_, queryFilter, &startRef, nullptr);
     if (!startRef)

@@ -63,6 +63,9 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // struct BiasParameters | File: ../Graphics/Light.h
     engine->RegisterObjectType("BiasParameters", sizeof(BiasParameters), asOBJ_VALUE | asGetTypeTraits<BiasParameters>() | asOBJ_POD | asOBJ_APP_CLASS_ALLFLOATS);
 
+    // class BigInt | File: ../Math/BigInt.h
+    engine->RegisterObjectType("BigInt", sizeof(BigInt), asOBJ_VALUE | asGetTypeTraits<BigInt>());
+
     // struct Billboard | File: ../Graphics/BillboardSet.h
     engine->RegisterObjectType("Billboard", 0, asOBJ_REF | asOBJ_NOCOUNT);
 
@@ -138,7 +141,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class Frustum | File: ../Math/Frustum.h
     engine->RegisterObjectType("Frustum", sizeof(Frustum), asOBJ_VALUE | asGetTypeTraits<Frustum>());
 
-    // class GPUObject | File: ../Graphics/GPUObject.h
+    // class GPUObject | File: ../GraphicsAPI/GPUObject.h
     engine->RegisterObjectType("GPUObject", sizeof(GPUObject), asOBJ_VALUE | asGetTypeTraits<GPUObject>());
 
     // struct GeometryDesc | File: ../Graphics/Model.h
@@ -315,7 +318,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class Serializer | File: ../IO/Serializer.h
     engine->RegisterObjectType("Serializer", 0, asOBJ_REF | asOBJ_NOCOUNT);
 
-    // struct ShaderParameter | File: ../Graphics/ShaderVariation.h
+    // struct ShaderParameter | File: ../GraphicsAPI/ShaderVariation.h
     engine->RegisterObjectType("ShaderParameter", sizeof(ShaderParameter), asOBJ_VALUE | asGetTypeTraits<ShaderParameter>());
 
     // struct ShadowBatchQueue | File: ../Graphics/Batch.h
@@ -399,7 +402,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // struct VertexBufferMorph | File: ../Graphics/Model.h
     engine->RegisterObjectType("VertexBufferMorph", sizeof(VertexBufferMorph), asOBJ_VALUE | asGetTypeTraits<VertexBufferMorph>());
 
-    // struct VertexElement | File: ../Graphics/GraphicsDefs.h
+    // struct VertexElement | File: ../GraphicsAPI/GraphicsDefs.h
     engine->RegisterObjectType("VertexElement", sizeof(VertexElement), asOBJ_VALUE | asGetTypeTraits<VertexElement>());
 
     // class WString | File: ../Container/Str.h
@@ -544,13 +547,13 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class RenderPath | File: ../Graphics/RenderPath.h
     engine->RegisterObjectType("RenderPath", 0, asOBJ_REF);
 
-    // class RenderSurface | File: ../Graphics/RenderSurface.h
+    // class RenderSurface | File: ../GraphicsAPI/RenderSurface.h
     engine->RegisterObjectType("RenderSurface", 0, asOBJ_REF);
 
     // struct SceneReplicationState | File: ../Scene/ReplicationState.h
     engine->RegisterObjectType("SceneReplicationState", sizeof(SceneReplicationState), asOBJ_VALUE | asGetTypeTraits<SceneReplicationState>());
 
-    // class ShaderVariation | File: ../Graphics/ShaderVariation.h
+    // class ShaderVariation | File: ../GraphicsAPI/ShaderVariation.h
     engine->RegisterObjectType("ShaderVariation", 0, asOBJ_REF);
 
     // class SoundStream | File: ../Audio/SoundStream.h
@@ -609,7 +612,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class Console | File: ../Engine/Console.h
     engine->RegisterObjectType("Console", 0, asOBJ_REF);
 
-    // class ConstantBuffer | File: ../Graphics/ConstantBuffer.h
+    // class ConstantBuffer | File: ../GraphicsAPI/ConstantBuffer.h
     engine->RegisterObjectType("ConstantBuffer", 0, asOBJ_REF);
 
     // class DebugHud | File: ../Engine/DebugHud.h
@@ -645,7 +648,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class Graphics | File: ../Graphics/Graphics.h
     engine->RegisterObjectType("Graphics", 0, asOBJ_REF);
 
-    // class IndexBuffer | File: ../Graphics/IndexBuffer.h
+    // class IndexBuffer | File: ../GraphicsAPI/IndexBuffer.h
     engine->RegisterObjectType("IndexBuffer", 0, asOBJ_REF);
 
     // class Input | File: ../Input/Input.h
@@ -696,7 +699,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class ShaderParameterAnimationInfo | File: ../Graphics/Material.h
     engine->RegisterObjectType("ShaderParameterAnimationInfo", 0, asOBJ_REF);
 
-    // class ShaderPrecache | File: ../Graphics/ShaderPrecache.h
+    // class ShaderPrecache | File: ../GraphicsAPI/ShaderPrecache.h
     engine->RegisterObjectType("ShaderPrecache", 0, asOBJ_REF);
 
     // class Time | File: ../Core/Timer.h
@@ -708,7 +711,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class VectorBuffer | File: ../IO/VectorBuffer.h
     engine->RegisterObjectType("VectorBuffer", sizeof(VectorBuffer), asOBJ_VALUE | asGetTypeTraits<VectorBuffer>());
 
-    // class VertexBuffer | File: ../Graphics/VertexBuffer.h
+    // class VertexBuffer | File: ../GraphicsAPI/VertexBuffer.h
     engine->RegisterObjectType("VertexBuffer", 0, asOBJ_REF);
 
     // class View | File: ../Graphics/View.h
@@ -785,7 +788,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class ResourceWithMetadata | File: ../Resource/Resource.h
     engine->RegisterObjectType("ResourceWithMetadata", 0, asOBJ_REF);
 
-    // class Shader | File: ../Graphics/Shader.h
+    // class Shader | File: ../GraphicsAPI/Shader.h
     engine->RegisterObjectType("Shader", 0, asOBJ_REF);
 
     // class Technique | File: ../Graphics/Technique.h
@@ -829,7 +832,7 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class Sound | File: ../Audio/Sound.h
     engine->RegisterObjectType("Sound", 0, asOBJ_REF);
 
-    // class Texture | File: ../Graphics/Texture.h
+    // class Texture | File: ../GraphicsAPI/Texture.h
     engine->RegisterObjectType("Texture", 0, asOBJ_REF);
 
     // class UIElement | File: ../UI/UIElement.h
@@ -880,16 +883,16 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
     // class Terrain | File: ../Graphics/Terrain.h
     engine->RegisterObjectType("Terrain", 0, asOBJ_REF);
 
-    // class Texture2D | File: ../Graphics/Texture2D.h
+    // class Texture2D | File: ../GraphicsAPI/Texture2D.h
     engine->RegisterObjectType("Texture2D", 0, asOBJ_REF);
 
-    // class Texture2DArray | File: ../Graphics/Texture2DArray.h
+    // class Texture2DArray | File: ../GraphicsAPI/Texture2DArray.h
     engine->RegisterObjectType("Texture2DArray", 0, asOBJ_REF);
 
-    // class Texture3D | File: ../Graphics/Texture3D.h
+    // class Texture3D | File: ../GraphicsAPI/Texture3D.h
     engine->RegisterObjectType("Texture3D", 0, asOBJ_REF);
 
-    // class TextureCube | File: ../Graphics/TextureCube.h
+    // class TextureCube | File: ../GraphicsAPI/TextureCube.h
     engine->RegisterObjectType("TextureCube", 0, asOBJ_REF);
 
     // class ToolTip | File: ../UI/ToolTip.h
@@ -1088,9 +1091,6 @@ void ASRegisterGeneratedObjectTypes(asIScriptEngine* engine)
 
     // class ConstraintRevolute2D | File: ../Physics2D/ConstraintRevolute2D.h
     engine->RegisterObjectType("ConstraintRevolute2D", 0, asOBJ_REF);
-
-    // class ConstraintRope2D | File: ../Physics2D/ConstraintRope2D.h
-    engine->RegisterObjectType("ConstraintRope2D", 0, asOBJ_REF);
 
     // class ConstraintWeld2D | File: ../Physics2D/ConstraintWeld2D.h
     engine->RegisterObjectType("ConstraintWeld2D", 0, asOBJ_REF);

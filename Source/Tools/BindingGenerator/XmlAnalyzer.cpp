@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #include "Utils.h"
 #include "XmlAnalyzer.h"
@@ -57,7 +38,6 @@ TypeAnalyzer::TypeAnalyzer(xml_node type, const TemplateSpecialization& speciali
     fullType_ = RemoveFirst(fullType_, "URHO3D_API ");
     fullType_ = RemoveFirst(fullType_, " URHO3D_API");
     fullType_ = CutStart(fullType_, "volatile ");
-    fullType_ = CutStart(fullType_, "constexpr ");
     fullType_ = ReplaceAll(fullType_, " *", "*");
     fullType_ = ReplaceAll(fullType_, " &", "&");
     fullType_ = ReplaceAll(fullType_, "< ", "<");
@@ -69,8 +49,25 @@ TypeAnalyzer::TypeAnalyzer(xml_node type, const TemplateSpecialization& speciali
         fullType_ = regex_replace(fullType_, rgx, it.second);
     }
 
-    isConst_ = StartsWith(fullType_, "const ");
-    name_ = CutStart(fullType_, "const ");
+    if (StartsWith(fullType_, "constexpr "))
+    {
+        isConstexpr_ = true;
+        isConst_ = false;
+        fullType_ = CutStart(fullType_, "constexpr ");
+        name_ = fullType_;
+    }
+    else if (StartsWith(fullType_, "const "))
+    {
+        isConst_ = true;
+        isConstexpr_ = false;
+        name_ = CutStart(fullType_, "const ");
+    }
+    else
+    {
+        isConst_ = false;
+        isConstexpr_ = false;
+        name_ = fullType_;
+    }
 
     isRvalueReference_ = EndsWith(name_, "&&");
     name_ = CutEnd(name_, "&&");
@@ -100,6 +97,7 @@ TypeAnalyzer::TypeAnalyzer(const string& typeName)
     fullType_ = typeName;
     name_ = typeName;
     isConst_ = false;
+    isConstexpr_ = false;
     isPointer_ = false;
     isReference_ = false;
     isRvalueReference_ = false;
@@ -227,6 +225,9 @@ static string BeautifyDefinition(const string& definition)
     result = ReplaceAll(result, "- = ", "-=");
     result = ReplaceAll(result, "* = ", "*=");
     result = ReplaceAll(result, "/ = ", "/=");
+    result = ReplaceAll(result, "% = ", "%=");
+    result = ReplaceAll(result, "< = ", "<=");
+    result = ReplaceAll(result, "> = ", "<=");
     result = ReplaceAll(result, "operator = ", "operator=");
 
     result = ReplaceAll(result, "operator", "operator ");
@@ -239,6 +240,7 @@ static string BeautifyDefinition(const string& definition)
     result = ReplaceAll(result, " >", ">");
 
     result = ReplaceAll(result, "template<", "template <");
+    result = ReplaceAll(result, "operator>", "operator >");
 
     return result;
 }

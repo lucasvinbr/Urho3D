@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #include "../Precompiled.h"
 
@@ -45,6 +26,8 @@
 #include <DetourTileCache/DetourTileCache.h>
 #include <DetourTileCache/DetourTileCacheBuilder.h>
 #include <Recast/Recast.h>
+
+using namespace std;
 
 // DebugNew is deliberately not used because the macro 'free' conflicts with DetourTileCache's LinearAllocator interface
 //#include "../DebugNew.h"
@@ -215,9 +198,9 @@ DynamicNavigationMesh::DynamicNavigationMesh(Context* context) :
     // 64 is the largest tile-size that DetourTileCache will tolerate without silently failing
     tileSize_ = 64;
     partitionType_ = NAVMESH_PARTITION_MONOTONE;
-    allocator_ = new LinearAllocator(32000); //32kb to start
-    compressor_ = new TileCompressor();
-    meshProcessor_ = new MeshProcess(this);
+    allocator_ = make_unique<LinearAllocator>(32000); //32kb to start
+    compressor_ = make_unique<TileCompressor>();
+    meshProcessor_ = make_unique<MeshProcess>(this);
 }
 
 DynamicNavigationMesh::~DynamicNavigationMesh()
@@ -304,7 +287,7 @@ bool DynamicNavigationMesh::Allocate(const BoundingBox& boundingBox, unsigned ma
         return false;
     }
 
-    if (dtStatusFailed(tileCache_->init(&tileCacheParams, allocator_.Get(), compressor_.Get(), meshProcessor_.Get())))
+    if (dtStatusFailed(tileCache_->init(&tileCacheParams, allocator_.get(), compressor_.get(), meshProcessor_.get())))
     {
         URHO3D_LOGERROR("Could not initialize tile cache");
         ReleaseNavigationMesh();
@@ -419,7 +402,7 @@ bool DynamicNavigationMesh::Build()
             return false;
         }
 
-        if (dtStatusFailed(tileCache_->init(&tileCacheParams, allocator_.Get(), compressor_.Get(), meshProcessor_.Get())))
+        if (dtStatusFailed(tileCache_->init(&tileCacheParams, allocator_.get(), compressor_.get(), meshProcessor_.get())))
         {
             URHO3D_LOGERROR("Could not initialize tile cache");
             ReleaseNavigationMesh();
@@ -711,7 +694,7 @@ void DynamicNavigationMesh::SetNavigationDataAttr(const PODVector<unsigned char>
         ReleaseNavigationMesh();
         return;
     }
-    if (dtStatusFailed(tileCache_->init(&tcParams, allocator_.Get(), compressor_.Get(), meshProcessor_.Get())))
+    if (dtStatusFailed(tileCache_->init(&tcParams, allocator_.get(), compressor_.get(), meshProcessor_.get())))
     {
         URHO3D_LOGERROR("Could not initialize tile cache");
         ReleaseNavigationMesh();
@@ -825,7 +808,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
 
     const BoundingBox tileBoundingBox = GetTileBoundingBox(IntVector2(x, z));
 
-    DynamicNavBuildData build(allocator_.Get());
+    DynamicNavBuildData build(allocator_.get());
 
     rcConfig cfg;   // NOLINT(hicpp-member-init)
     memset(&cfg, 0, sizeof cfg);
@@ -972,7 +955,7 @@ int DynamicNavigationMesh::BuildTile(Vector<NavigationGeometryInfo>& geometryLis
         header.hmax = (unsigned short)layer->hmax;
 
         if (dtStatusFailed(
-            dtBuildTileCacheLayer(compressor_.Get()/*compressor*/, &header, layer->heights, layer->areas/*areas*/, layer->cons,
+            dtBuildTileCacheLayer(compressor_.get(), &header, layer->heights, layer->areas, layer->cons,
                 &(tiles[retCt].data), &tiles[retCt].dataSize)))
         {
             URHO3D_LOGERROR("Failed to build tile cache layers");

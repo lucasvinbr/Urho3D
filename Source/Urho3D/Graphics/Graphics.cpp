@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #include "../Precompiled.h"
 
@@ -32,42 +13,30 @@
 #include "../Graphics/DecalSet.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/GraphicsEvents.h"
-#include "../Graphics/GraphicsImpl.h"
 #include "../Graphics/Material.h"
 #include "../Graphics/Octree.h"
 #include "../Graphics/ParticleEffect.h"
 #include "../Graphics/ParticleEmitter.h"
 #include "../Graphics/RibbonTrail.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/ShaderPrecache.h"
 #include "../Graphics/Skybox.h"
 #include "../Graphics/StaticModelGroup.h"
 #include "../Graphics/Technique.h"
 #include "../Graphics/Terrain.h"
 #include "../Graphics/TerrainPatch.h"
-#ifdef _WIN32
-#include "../Graphics/Texture2D.h"
-#endif
-#include "../Graphics/Texture2DArray.h"
-#include "../Graphics/Texture3D.h"
-#include "../Graphics/TextureCube.h"
 #include "../Graphics/Zone.h"
+#include "../GraphicsAPI/GraphicsImpl.h"
+#include "../GraphicsAPI/Shader.h"
+#include "../GraphicsAPI/ShaderPrecache.h"
+#include "../GraphicsAPI/Texture2D.h"
+#include "../GraphicsAPI/Texture2DArray.h"
+#include "../GraphicsAPI/Texture3D.h"
+#include "../GraphicsAPI/TextureCube.h"
 #include "../IO/FileSystem.h"
 #include "../IO/Log.h"
 
 #include <SDL/SDL.h>
 
 #include "../DebugNew.h"
-
-#ifdef _WIN32
-// Prefer the high-performance GPU on switchable GPU systems
-#include <windows.h>
-extern "C"
-{
-    __declspec(dllexport) DWORD NvOptimusEnablement = 1;
-    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
-#endif
 
 namespace Urho3D
 {
@@ -683,6 +652,8 @@ bool Graphics::SetScreenMode(int width, int height, const ScreenModeParams& para
     if (gapi == GAPI_D3D11)
         return SetScreenMode_D3D11(width, height, params, maximize);;
 #endif
+
+    return {}; // Prevent warning
 }
 
 void Graphics::SetSRGB(bool enable)
@@ -803,6 +774,8 @@ bool Graphics::TakeScreenShot(Image& destImage)
     if (gapi == GAPI_D3D11)
         return TakeScreenShot_D3D11(destImage);
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::BeginFrame()
@@ -823,6 +796,8 @@ bool Graphics::BeginFrame()
     if (gapi == GAPI_D3D11)
         return BeginFrame_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 void Graphics::EndFrame()
@@ -883,6 +858,8 @@ bool Graphics::ResolveToTexture(Texture2D* destination, const IntRect& viewport)
     if (gapi == GAPI_D3D11)
         return ResolveToTexture_D3D11(destination, viewport);
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::ResolveToTexture(Texture2D* texture)
@@ -903,6 +880,8 @@ bool Graphics::ResolveToTexture(Texture2D* texture)
     if (gapi == GAPI_D3D11)
         return ResolveToTexture_D3D11(texture);
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::ResolveToTexture(TextureCube* texture)
@@ -923,6 +902,8 @@ bool Graphics::ResolveToTexture(TextureCube* texture)
     if (gapi == GAPI_D3D11)
         return ResolveToTexture_D3D11(texture);
 #endif
+
+    return {}; // Prevent warning
 }
 
 void Graphics::Draw(PrimitiveType type, unsigned vertexStart, unsigned vertexCount)
@@ -1064,6 +1045,8 @@ bool Graphics::SetVertexBuffers(const PODVector<VertexBuffer*>& buffers, unsigne
     if (gapi == GAPI_D3D11)
         return SetVertexBuffers_D3D11(buffers, instanceOffset);
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::SetVertexBuffers(const Vector<SharedPtr<VertexBuffer> >& buffers, unsigned instanceOffset)
@@ -1084,6 +1067,8 @@ bool Graphics::SetVertexBuffers(const Vector<SharedPtr<VertexBuffer> >& buffers,
     if (gapi == GAPI_D3D11)
         return SetVertexBuffers_D3D11(buffers, instanceOffset);
 #endif
+
+    return {}; // Prevent warning
 }
 
 void Graphics::SetIndexBuffer(IndexBuffer* buffer)
@@ -1364,6 +1349,8 @@ bool Graphics::NeedParameterUpdate(ShaderParameterGroup group, const void* sourc
     if (gapi == GAPI_D3D11)
         return NeedParameterUpdate_D3D11(group, source);
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::HasShaderParameter(StringHash param)
@@ -1384,6 +1371,8 @@ bool Graphics::HasShaderParameter(StringHash param)
     if (gapi == GAPI_D3D11)
         return HasShaderParameter_D3D11(param);
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::HasTextureUnit(TextureUnit unit)
@@ -1404,6 +1393,8 @@ bool Graphics::HasTextureUnit(TextureUnit unit)
     if (gapi == GAPI_D3D11)
         return HasTextureUnit_D3D11(unit);
 #endif
+
+    return {}; // Prevent warning
 }
 
 void Graphics::ClearParameterSource(ShaderParameterGroup group)
@@ -1945,6 +1936,8 @@ bool Graphics::IsInitialized() const
     if (gapi == GAPI_D3D11)
         return IsInitialized_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::GetDither() const
@@ -1965,6 +1958,8 @@ bool Graphics::GetDither() const
     if (gapi == GAPI_D3D11)
         return GetDither_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::IsDeviceLost() const
@@ -1985,6 +1980,8 @@ bool Graphics::IsDeviceLost() const
     if (gapi == GAPI_D3D11)
         return IsDeviceLost_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 PODVector<int> Graphics::GetMultiSampleLevels() const
@@ -2005,6 +2002,8 @@ PODVector<int> Graphics::GetMultiSampleLevels() const
     if (gapi == GAPI_D3D11)
         return GetMultiSampleLevels_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetFormat(CompressedFormat format) const
@@ -2025,6 +2024,8 @@ unsigned Graphics::GetFormat(CompressedFormat format) const
     if (gapi == GAPI_D3D11)
         return GetFormat_D3D11(format);
 #endif
+
+    return {}; // Prevent warning
 }
 
 ShaderVariation* Graphics::GetShader(ShaderType type, const String& name, const String& defines) const
@@ -2045,6 +2046,8 @@ ShaderVariation* Graphics::GetShader(ShaderType type, const String& name, const 
     if (gapi == GAPI_D3D11)
         return GetShader_D3D11(type, name, defines);
 #endif
+
+    return {}; // Prevent warning
 }
 
 ShaderVariation* Graphics::GetShader(ShaderType type, const char* name, const char* defines) const
@@ -2065,6 +2068,8 @@ ShaderVariation* Graphics::GetShader(ShaderType type, const char* name, const ch
     if (gapi == GAPI_D3D11)
         return GetShader_D3D11(type, name, defines);
 #endif
+
+    return {}; // Prevent warning
 }
 
 VertexBuffer* Graphics::GetVertexBuffer(unsigned index) const
@@ -2085,6 +2090,8 @@ VertexBuffer* Graphics::GetVertexBuffer(unsigned index) const
     if (gapi == GAPI_D3D11)
         return GetVertexBuffer_D3D11(index);
 #endif
+
+    return {}; // Prevent warning
 }
 
 TextureUnit Graphics::GetTextureUnit(const String& name)
@@ -2105,6 +2112,8 @@ TextureUnit Graphics::GetTextureUnit(const String& name)
     if (gapi == GAPI_D3D11)
         return GetTextureUnit_D3D11(name);
 #endif
+
+    return {}; // Prevent warning
 }
 
 const String& Graphics::GetTextureUnitName(TextureUnit unit)
@@ -2125,6 +2134,8 @@ const String& Graphics::GetTextureUnitName(TextureUnit unit)
     if (gapi == GAPI_D3D11)
         return GetTextureUnitName_D3D11(unit);
 #endif
+
+    return String::EMPTY; // Prevent warning
 }
 
 Texture* Graphics::GetTexture(unsigned index) const
@@ -2145,6 +2156,8 @@ Texture* Graphics::GetTexture(unsigned index) const
     if (gapi == GAPI_D3D11)
         return GetTexture_D3D11(index);
 #endif
+
+    return {}; // Prevent warning
 }
 
 RenderSurface* Graphics::GetRenderTarget(unsigned index) const
@@ -2165,6 +2178,8 @@ RenderSurface* Graphics::GetRenderTarget(unsigned index) const
     if (gapi == GAPI_D3D11)
         return GetRenderTarget_D3D11(index);
 #endif
+
+    return {}; // Prevent warning
 }
 
 IntVector2 Graphics::GetRenderTargetDimensions() const
@@ -2185,6 +2200,8 @@ IntVector2 Graphics::GetRenderTargetDimensions() const
     if (gapi == GAPI_D3D11)
         return GetRenderTargetDimensions_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 void Graphics::OnWindowResized()
@@ -2245,6 +2262,8 @@ ConstantBuffer* Graphics::GetOrCreateConstantBuffer(ShaderType type, unsigned in
     if (gapi == GAPI_D3D11)
         return GetOrCreateConstantBuffer_D3D11(type, index, size);
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetMaxBones()
@@ -2265,6 +2284,8 @@ unsigned Graphics::GetMaxBones()
     if (gapi == GAPI_D3D11)
         return GetMaxBones_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 bool Graphics::GetGL3Support()
@@ -2285,6 +2306,8 @@ bool Graphics::GetGL3Support()
     if (gapi == GAPI_D3D11)
         return GetGL3Support_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetAlphaFormat()
@@ -2305,6 +2328,8 @@ unsigned Graphics::GetAlphaFormat()
     if (gapi == GAPI_D3D11)
         return GetAlphaFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetLuminanceFormat()
@@ -2325,6 +2350,8 @@ unsigned Graphics::GetLuminanceFormat()
     if (gapi == GAPI_D3D11)
         return GetLuminanceFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetLuminanceAlphaFormat()
@@ -2345,6 +2372,8 @@ unsigned Graphics::GetLuminanceAlphaFormat()
     if (gapi == GAPI_D3D11)
         return GetLuminanceAlphaFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGBFormat()
@@ -2365,6 +2394,8 @@ unsigned Graphics::GetRGBFormat()
     if (gapi == GAPI_D3D11)
         return GetRGBFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGBAFormat()
@@ -2385,6 +2416,8 @@ unsigned Graphics::GetRGBAFormat()
     if (gapi == GAPI_D3D11)
         return GetRGBAFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGBA16Format()
@@ -2405,6 +2438,8 @@ unsigned Graphics::GetRGBA16Format()
     if (gapi == GAPI_D3D11)
         return GetRGBA16Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGBAFloat16Format()
@@ -2425,6 +2460,8 @@ unsigned Graphics::GetRGBAFloat16Format()
     if (gapi == GAPI_D3D11)
         return GetRGBAFloat16Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGBAFloat32Format()
@@ -2445,6 +2482,8 @@ unsigned Graphics::GetRGBAFloat32Format()
     if (gapi == GAPI_D3D11)
         return GetRGBAFloat32Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRG16Format()
@@ -2465,6 +2504,8 @@ unsigned Graphics::GetRG16Format()
     if (gapi == GAPI_D3D11)
         return GetRG16Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGFloat16Format()
@@ -2485,6 +2526,8 @@ unsigned Graphics::GetRGFloat16Format()
     if (gapi == GAPI_D3D11)
         return GetRGFloat16Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetRGFloat32Format()
@@ -2505,6 +2548,8 @@ unsigned Graphics::GetRGFloat32Format()
     if (gapi == GAPI_D3D11)
         return GetRGFloat32Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetFloat16Format()
@@ -2525,6 +2570,8 @@ unsigned Graphics::GetFloat16Format()
     if (gapi == GAPI_D3D11)
         return GetFloat16Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetFloat32Format()
@@ -2545,6 +2592,8 @@ unsigned Graphics::GetFloat32Format()
     if (gapi == GAPI_D3D11)
         return GetFloat32Format_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetLinearDepthFormat()
@@ -2565,6 +2614,8 @@ unsigned Graphics::GetLinearDepthFormat()
     if (gapi == GAPI_D3D11)
         return GetLinearDepthFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetDepthStencilFormat()
@@ -2585,6 +2636,8 @@ unsigned Graphics::GetDepthStencilFormat()
     if (gapi == GAPI_D3D11)
         return GetDepthStencilFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetReadableDepthFormat()
@@ -2605,6 +2658,8 @@ unsigned Graphics::GetReadableDepthFormat()
     if (gapi == GAPI_D3D11)
         return GetReadableDepthFormat_D3D11();
 #endif
+
+    return {}; // Prevent warning
 }
 
 unsigned Graphics::GetFormat(const String& formatName)
@@ -2625,6 +2680,8 @@ unsigned Graphics::GetFormat(const String& formatName)
     if (gapi == GAPI_D3D11)
         return GetFormat_D3D11(formatName);
 #endif
+
+    return {}; // Prevent warning
 }
 
 void RegisterGraphicsLibrary(Context* context)

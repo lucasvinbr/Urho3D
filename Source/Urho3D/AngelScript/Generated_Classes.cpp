@@ -294,6 +294,63 @@ static void Register_BiasParameters(asIScriptEngine* engine)
     RegisterImplicitlyDeclaredAssignOperatorIfPossible<BiasParameters>(engine, "BiasParameters");
 }
 
+// BigInt::BigInt(const String& str)
+static void BigInt__BigInt_constspStringamp(BigInt* _ptr, const String& str)
+{
+    new(_ptr) BigInt(str);
+}
+
+// BigInt::BigInt(i32 value)
+static void BigInt__BigInt_i32(BigInt* _ptr, i32 value)
+{
+    new(_ptr) BigInt(value);
+}
+
+// BigInt::BigInt(i64 value)
+static void BigInt__BigInt_i64(BigInt* _ptr, i64 value)
+{
+    new(_ptr) BigInt(value);
+}
+
+// BigInt::BigInt(u32 value)
+static void BigInt__BigInt_u32(BigInt* _ptr, u32 value)
+{
+    new(_ptr) BigInt(value);
+}
+
+// BigInt::BigInt(u64 value)
+static void BigInt__BigInt_u64(BigInt* _ptr, u64 value)
+{
+    new(_ptr) BigInt(value);
+}
+
+// class BigInt | File: ../Math/BigInt.h
+static void Register_BigInt(asIScriptEngine* engine)
+{
+    // BigInt::BigInt(const String& str)
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_CONSTRUCT, "void f(const String&in)", AS_FUNCTION_OBJFIRST(BigInt__BigInt_constspStringamp), AS_CALL_CDECL_OBJFIRST);
+    // BigInt::BigInt(i32 value)
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_CONSTRUCT, "void f(int)", AS_FUNCTION_OBJFIRST(BigInt__BigInt_i32), AS_CALL_CDECL_OBJFIRST);
+    // BigInt::BigInt(i64 value)
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_CONSTRUCT, "void f(int64)", AS_FUNCTION_OBJFIRST(BigInt__BigInt_i64), AS_CALL_CDECL_OBJFIRST);
+    // BigInt::BigInt(u32 value)
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_CONSTRUCT, "void f(uint)", AS_FUNCTION_OBJFIRST(BigInt__BigInt_u32), AS_CALL_CDECL_OBJFIRST);
+    // BigInt::BigInt(u64 value)
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_CONSTRUCT, "void f(uint64)", AS_FUNCTION_OBJFIRST(BigInt__BigInt_u64), AS_CALL_CDECL_OBJFIRST);
+
+    // BigInt::~BigInt() | Implicitly-declared
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_DESTRUCT, "void f()", AS_DESTRUCTOR(BigInt), AS_CALL_CDECL_OBJFIRST);
+
+    RegisterMembers_BigInt<BigInt>(engine, "BigInt");
+
+    #ifdef REGISTER_CLASS_MANUAL_PART_BigInt
+        REGISTER_CLASS_MANUAL_PART_BigInt();
+    #endif
+
+    // BigInt& BigInt::operator =(const BigInt&) | Possible implicitly-declared
+    RegisterImplicitlyDeclaredAssignOperatorIfPossible<BigInt>(engine, "BigInt");
+}
+
 // struct Billboard | File: ../Graphics/BillboardSet.h
 static void Register_Billboard(asIScriptEngine* engine)
 {
@@ -844,7 +901,7 @@ static void GPUObject__GPUObject_Graphicsstar(GPUObject* _ptr, Graphics* graphic
     new(_ptr) GPUObject(graphics);
 }
 
-// class GPUObject | File: ../Graphics/GPUObject.h
+// class GPUObject | File: ../GraphicsAPI/GPUObject.h
 static void Register_GPUObject(asIScriptEngine* engine)
 {
     // explicit GPUObject::GPUObject(Graphics* graphics)
@@ -2156,7 +2213,7 @@ static void ShaderParameter__ShaderParameter_ShaderType_constspStringamp_unsigne
     new(_ptr) ShaderParameter(type, name, reg, regCount);
 }
 
-// struct ShaderParameter | File: ../Graphics/ShaderVariation.h
+// struct ShaderParameter | File: ../GraphicsAPI/ShaderVariation.h
 static void Register_ShaderParameter(asIScriptEngine* engine)
 {
     // ShaderParameter::ShaderParameter(const String& name, unsigned glType, int location)
@@ -3160,7 +3217,7 @@ static void VertexElement__VertexElement_VertexElementType_VertexElementSemantic
     new(_ptr) VertexElement(type, semantic, index, perInstance);
 }
 
-// struct VertexElement | File: ../Graphics/GraphicsDefs.h
+// struct VertexElement | File: ../GraphicsAPI/GraphicsDefs.h
 static void Register_VertexElement(asIScriptEngine* engine)
 {
     // VertexElement::VertexElement(VertexElementType type, VertexElementSemantic semantic, unsigned char index = 0, bool perInstance = false) noexcept
@@ -3771,7 +3828,7 @@ static RenderSurface* RenderSurface__RenderSurface_Texturestar(Texture* parentTe
     return new RenderSurface(parentTexture);
 }
 
-// class RenderSurface | File: ../Graphics/RenderSurface.h
+// class RenderSurface | File: ../GraphicsAPI/RenderSurface.h
 static void Register_RenderSurface(asIScriptEngine* engine)
 {
     // explicit RenderSurface::RenderSurface(Texture* parentTexture)
@@ -3808,7 +3865,7 @@ static ShaderVariation* ShaderVariation__ShaderVariation_Shaderstar_ShaderType(S
     return new ShaderVariation(owner, type);
 }
 
-// class ShaderVariation | File: ../Graphics/ShaderVariation.h
+// class ShaderVariation | File: ../GraphicsAPI/ShaderVariation.h
 static void Register_ShaderVariation(asIScriptEngine* engine)
 {
     // ShaderVariation::ShaderVariation(Shader* owner, ShaderType type)
@@ -4092,7 +4149,7 @@ static ConstantBuffer* ConstantBuffer__ConstantBuffer_Contextstar()
     return new ConstantBuffer(context);
 }
 
-// class ConstantBuffer | File: ../Graphics/ConstantBuffer.h
+// class ConstantBuffer | File: ../GraphicsAPI/ConstantBuffer.h
 static void Register_ConstantBuffer(asIScriptEngine* engine)
 {
     // explicit ConstantBuffer::ConstantBuffer(Context* context)
@@ -4363,7 +4420,7 @@ static IndexBuffer* IndexBuffer__IndexBuffer_Contextstar_bool(bool forceHeadless
     return new IndexBuffer(context, forceHeadless);
 }
 
-// class IndexBuffer | File: ../Graphics/IndexBuffer.h
+// class IndexBuffer | File: ../GraphicsAPI/IndexBuffer.h
 static void Register_IndexBuffer(asIScriptEngine* engine)
 {
     // explicit IndexBuffer::IndexBuffer(Context* context, bool forceHeadless = false)
@@ -4737,7 +4794,7 @@ static ShaderPrecache* ShaderPrecache__ShaderPrecache_Contextstar_constspStringa
     return new ShaderPrecache(context, fileName);
 }
 
-// class ShaderPrecache | File: ../Graphics/ShaderPrecache.h
+// class ShaderPrecache | File: ../GraphicsAPI/ShaderPrecache.h
 static void Register_ShaderPrecache(asIScriptEngine* engine)
 {
     // ShaderPrecache::ShaderPrecache(Context* context, const String& fileName)
@@ -4836,7 +4893,7 @@ static VertexBuffer* VertexBuffer__VertexBuffer_Contextstar_bool(bool forceHeadl
     return new VertexBuffer(context, forceHeadless);
 }
 
-// class VertexBuffer | File: ../Graphics/VertexBuffer.h
+// class VertexBuffer | File: ../GraphicsAPI/VertexBuffer.h
 static void Register_VertexBuffer(asIScriptEngine* engine)
 {
     // explicit VertexBuffer::VertexBuffer(Context* context, bool forceHeadless = false)
@@ -5408,7 +5465,7 @@ static Shader* Shader__Shader_Contextstar()
     return new Shader(context);
 }
 
-// class Shader | File: ../Graphics/Shader.h
+// class Shader | File: ../GraphicsAPI/Shader.h
 static void Register_Shader(asIScriptEngine* engine)
 {
     // explicit Shader::Shader(Context* context)
@@ -5768,7 +5825,7 @@ static Texture* Texture__Texture_Contextstar()
     return new Texture(context);
 }
 
-// class Texture | File: ../Graphics/Texture.h
+// class Texture | File: ../GraphicsAPI/Texture.h
 static void Register_Texture(asIScriptEngine* engine)
 {
     // explicit Texture::Texture(Context* context)
@@ -6220,7 +6277,7 @@ static Texture2D* Texture2D__Texture2D_Contextstar()
     return new Texture2D(context);
 }
 
-// class Texture2D | File: ../Graphics/Texture2D.h
+// class Texture2D | File: ../GraphicsAPI/Texture2D.h
 static void Register_Texture2D(asIScriptEngine* engine)
 {
     // explicit Texture2D::Texture2D(Context* context)
@@ -6246,7 +6303,7 @@ static Texture2DArray* Texture2DArray__Texture2DArray_Contextstar()
     return new Texture2DArray(context);
 }
 
-// class Texture2DArray | File: ../Graphics/Texture2DArray.h
+// class Texture2DArray | File: ../GraphicsAPI/Texture2DArray.h
 static void Register_Texture2DArray(asIScriptEngine* engine)
 {
     // explicit Texture2DArray::Texture2DArray(Context* context)
@@ -6272,7 +6329,7 @@ static Texture3D* Texture3D__Texture3D_Contextstar()
     return new Texture3D(context);
 }
 
-// class Texture3D | File: ../Graphics/Texture3D.h
+// class Texture3D | File: ../GraphicsAPI/Texture3D.h
 static void Register_Texture3D(asIScriptEngine* engine)
 {
     // explicit Texture3D::Texture3D(Context* context)
@@ -6298,7 +6355,7 @@ static TextureCube* TextureCube__TextureCube_Contextstar()
     return new TextureCube(context);
 }
 
-// class TextureCube | File: ../Graphics/TextureCube.h
+// class TextureCube | File: ../GraphicsAPI/TextureCube.h
 static void Register_TextureCube(asIScriptEngine* engine)
 {
     // explicit TextureCube::TextureCube(Context* context)
@@ -7912,33 +7969,6 @@ static void Register_ConstraintRevolute2D(asIScriptEngine* engine)
     #endif
 }
 
-// explicit ConstraintRope2D::ConstraintRope2D(Context* context)
-static ConstraintRope2D* ConstraintRope2D__ConstraintRope2D_Contextstar()
-{
-    Context* context = GetScriptContext();
-    return new ConstraintRope2D(context);
-}
-
-// class ConstraintRope2D | File: ../Physics2D/ConstraintRope2D.h
-static void Register_ConstraintRope2D(asIScriptEngine* engine)
-{
-    // explicit ConstraintRope2D::ConstraintRope2D(Context* context)
-    engine->RegisterObjectBehaviour("ConstraintRope2D", asBEHAVE_FACTORY, "ConstraintRope2D@+ f()", AS_FUNCTION(ConstraintRope2D__ConstraintRope2D_Contextstar) , AS_CALL_CDECL);
-
-    RegisterSubclass<Constraint2D, ConstraintRope2D>(engine, "Constraint2D", "ConstraintRope2D");
-    RegisterSubclass<Component, ConstraintRope2D>(engine, "Component", "ConstraintRope2D");
-    RegisterSubclass<Animatable, ConstraintRope2D>(engine, "Animatable", "ConstraintRope2D");
-    RegisterSubclass<Serializable, ConstraintRope2D>(engine, "Serializable", "ConstraintRope2D");
-    RegisterSubclass<Object, ConstraintRope2D>(engine, "Object", "ConstraintRope2D");
-    RegisterSubclass<RefCounted, ConstraintRope2D>(engine, "RefCounted", "ConstraintRope2D");
-
-    RegisterMembers_ConstraintRope2D<ConstraintRope2D>(engine, "ConstraintRope2D");
-
-    #ifdef REGISTER_CLASS_MANUAL_PART_ConstraintRope2D
-        REGISTER_CLASS_MANUAL_PART_ConstraintRope2D();
-    #endif
-}
-
 // explicit ConstraintWeld2D::ConstraintWeld2D(Context* context)
 static ConstraintWeld2D* ConstraintWeld2D__ConstraintWeld2D_Contextstar()
 {
@@ -8382,6 +8412,7 @@ void ASRegisterGeneratedClasses(asIScriptEngine* engine)
     Register_BatchGroupKey(engine);
     Register_BatchQueue(engine);
     Register_BiasParameters(engine);
+    Register_BigInt(engine);
     Register_Billboard(engine);
     Register_Bone(engine);
     Register_BoundingBox(engine);
@@ -8753,7 +8784,6 @@ void ASRegisterGeneratedClasses(asIScriptEngine* engine)
     Register_ConstraintPrismatic2D(engine);
     Register_ConstraintPulley2D(engine);
     Register_ConstraintRevolute2D(engine);
-    Register_ConstraintRope2D(engine);
     Register_ConstraintWeld2D(engine);
     Register_ConstraintWheel2D(engine);
 #endif

@@ -1,28 +1,11 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #pragma once
 
 #include "../Navigation/NavigationMesh.h"
+
+#include <memory>
 
 class dtTileCache;
 struct dtTileCacheAlloc;
@@ -139,18 +122,25 @@ private:
 
     /// Detour tile cache instance that works with the nav mesh.
     dtTileCache* tileCache_{};
+    
     /// Used by dtTileCache to allocate blocks of memory.
-    UniquePtr<dtTileCacheAlloc> allocator_;
+    std::unique_ptr<dtTileCacheAlloc> allocator_;
+    
     /// Used by dtTileCache to compress the original tiles to use when reconstructing for changes.
-    UniquePtr<dtTileCacheCompressor> compressor_;
+    std::unique_ptr<dtTileCacheCompressor> compressor_;
+    
     /// Mesh processor used by Detour, in this case a 'pass-through' processor.
-    UniquePtr<dtTileCacheMeshProcess> meshProcessor_;
+    std::unique_ptr<dtTileCacheMeshProcess> meshProcessor_;
+    
     /// Maximum number of obstacle objects allowed.
     unsigned maxObstacles_{1024};
+    
     /// Maximum number of layers that are allowed to be constructed.
     unsigned maxLayers_{};
+    
     /// Debug draw Obstacles.
     bool drawObstacles_{};
+    
     /// Queue of tiles to be built.
     PODVector<IntVector2> tileQueue_;
 };

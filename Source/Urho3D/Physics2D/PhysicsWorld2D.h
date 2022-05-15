@@ -1,31 +1,14 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #pragma once
 
 #include "../Scene/Component.h"
 #include "../IO/VectorBuffer.h"
 
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
+
+#include <memory>
 
 namespace Urho3D
 {
@@ -97,15 +80,15 @@ public:
     /// Draw a solid closed polygon provided in CCW order.
     void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
     /// Draw a circle.
-    void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) override;
+    void DrawCircle(const b2Vec2& center, float radius, const b2Color& color) override;
     /// Draw a solid circle.
-    void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) override;
+    void DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color) override;
     /// Draw a line segment.
     void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
     /// Draw a transform. Choose your own length scale.
     void DrawTransform(const b2Transform& xf) override;
     /// Draw a point.
-    void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color) override;
+    void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
     /// Step the simulation forward.
     void Update(float timeStep);
@@ -226,7 +209,7 @@ public:
     int GetPositionIterations() const { return positionIterations_; }
 
     /// Return the Box2D physics world.
-    b2World* GetWorld() { return world_.Get(); }
+    b2World* GetWorld() { return world_.get(); }
 
     /// Set node dirtying to be disregarded.
     void SetApplyingTransforms(bool enable) { applyingTransforms_ = enable; }
@@ -246,7 +229,8 @@ protected:
     void SendEndContactEvents();
 
     /// Box2D physics world.
-    UniquePtr<b2World> world_;
+    std::unique_ptr<b2World> world_;
+    
     /// Gravity.
     Vector2 gravity_;
     /// Velocity iterations.

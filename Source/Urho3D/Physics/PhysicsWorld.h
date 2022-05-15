@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #pragma once
 
@@ -30,6 +11,8 @@
 #include "../Scene/Component.h"
 
 #include <Bullet/LinearMath/btIDebugDraw.h>
+
+#include <memory>
 
 class btCollisionConfiguration;
 class btCollisionShape;
@@ -277,7 +260,7 @@ public:
     void SetDebugDepthTest(bool enable);
 
     /// Return the Bullet physics world.
-    btDiscreteDynamicsWorld* GetWorld() { return world_.Get(); }
+    btDiscreteDynamicsWorld* GetWorld() { return world_.get(); }
 
     /// Clean up the geometry cache.
     void CleanupGeometryCache();
@@ -319,14 +302,19 @@ private:
 
     /// Bullet collision configuration.
     btCollisionConfiguration* collisionConfiguration_{};
+    
     /// Bullet collision dispatcher.
-    UniquePtr<btDispatcher> collisionDispatcher_;
+    std::unique_ptr<btDispatcher> collisionDispatcher_;
+    
     /// Bullet collision broadphase.
-    UniquePtr<btBroadphaseInterface> broadphase_;
+    std::unique_ptr<btBroadphaseInterface> broadphase_;
+    
     /// Bullet constraint solver.
-    UniquePtr<btConstraintSolver> solver_;
+    std::unique_ptr<btConstraintSolver> solver_;
+    
     /// Bullet physics world.
-    UniquePtr<btDiscreteDynamicsWorld> world_;
+    std::unique_ptr<btDiscreteDynamicsWorld> world_;
+    
     /// Extra weak pointer to scene to allow for cleanup in case the world is destroyed before other components.
     WeakPtr<Scene> scene_;
     /// Rigid bodies in the world.

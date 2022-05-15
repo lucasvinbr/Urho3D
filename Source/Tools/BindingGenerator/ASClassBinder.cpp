@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #include "ASResult.h"
 #include "ASUtils.h"
@@ -284,6 +265,9 @@ static string CppMethodNameToAS(const MethodAnalyzer& methodAnalyzer)
     if (name == "operator/")
         return "opDiv";
 
+    if (name == "operator%")
+        return "opMod";
+
     if (name == "operator+=")
         return "opAddAssign";
 
@@ -295,6 +279,9 @@ static string CppMethodNameToAS(const MethodAnalyzer& methodAnalyzer)
 
     if (name == "operator/=")
         return "opDivAssign";
+
+    if (name == "operator%=")
+        return "opModAssign";
 
     if (name == "operator==")
         return "opEquals";
@@ -319,6 +306,24 @@ static string CppMethodNameToAS(const MethodAnalyzer& methodAnalyzer)
 
     if (name == "operator>")
         throw Exception("Registerd as opCmp separately");
+
+    if (name == "operator<=")
+        throw Exception("Registerd as opCmp separately");
+
+    if (name == "operator>=")
+        throw Exception("Registerd as opCmp separately");
+
+    if (methodAnalyzer.IsPrefixIncrementOperator())
+        return "opPreInc";
+
+    if (methodAnalyzer.IsPostfixIncrementOperator())
+        return "opPostInc";
+
+    if (methodAnalyzer.IsPrefixDecrementOperator())
+        return "opPreDec";
+
+    if (methodAnalyzer.IsPostfixDecrementOperator())
+        return "opPostDec";
 
     return name;
 }
@@ -417,7 +422,7 @@ static bool ContainsSameSignature(const string& className, const string& methodS
 static void InitCachedMemberSignatures()
 { 
     // Fill signatures
-    for (auto element : SourceData::classesByID_)
+    for (pair<const string, xml_node>& element : SourceData::classesByID_)
     {
         xml_node compounddef = element.second;
         ClassAnalyzer classAnalyzer(compounddef);
@@ -429,7 +434,7 @@ static void InitCachedMemberSignatures()
     }
 
     // Fill hidden in any derived classes members
-    for (auto element : SourceData::classesByID_)
+    for (pair<const string, xml_node>& element : SourceData::classesByID_)
     {
         xml_node compounddef = element.second;
         ClassAnalyzer classAnalyzer(compounddef);
@@ -909,7 +914,11 @@ static void RegisterMethod(const MethodAnalyzer& methodAnalyzer, ProcessedClass&
 
         try
         {
-            conv = CppVariableToAS(param.GetType(), VariableUsage::FunctionParameter, param.GetDeclname(), param.GetDefval());
+            VariableUsage varUsage = VariableUsage::FunctionParameter;
+            if (methodAnalyzer.IsPostfixIncrementOperator() || methodAnalyzer.IsPostfixDecrementOperator())
+                varUsage = VariableUsage::PostfixIncDecParameter;
+
+            conv = CppVariableToAS(param.GetType(), varUsage, param.GetDeclname(), param.GetDefval());
         }
         catch (const Exception& e)
         {
@@ -1121,7 +1130,7 @@ static void RegisterField(const FieldAnalyzer& fieldAnalyzer, ProcessedClass& pr
             return;
         }
 
-        if (fieldAnalyzer.GetType().IsConst())
+        if (fieldAnalyzer.GetType().IsConst() || fieldAnalyzer.GetType().IsConstexpr())
             asType = "const " + asType;
 
         asType = ReplaceAll(asType, "struct ", "");
@@ -1178,8 +1187,8 @@ static void RegisterField(const FieldAnalyzer& fieldAnalyzer, ProcessedClass& pr
         catch (const Exception& e)
         {
             MemberRegistrationError regError;
-            regError.name_ = fieldAnalyzer.GetName();
-            regError.comment_ = fieldAnalyzer.GetDeclaration();
+            regError.name_ = HideUnnamedType(fieldAnalyzer.GetName());
+            regError.comment_ = HideUnnamedType(fieldAnalyzer.GetDeclaration());
             regError.message_ = e.what();
             processedClass.unregisteredTemplateFields_.push_back(regError);
             return;
@@ -1396,7 +1405,7 @@ void ProcessAllClasses()
 {
     InitCachedMemberSignatures();
 
-    for (auto element : SourceData::classesByID_)
+    for (pair<const string, xml_node>& element : SourceData::classesByID_)
     {
         xml_node compounddef = element.second;
         ClassAnalyzer analyzer(compounddef);

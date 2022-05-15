@@ -51,6 +51,9 @@ void ASRegisterGeneratedDefaultConstructors(asIScriptEngine* engine)
     // BiasParameters::BiasParameters() = default | File: ../Graphics/Light.h
     engine->RegisterObjectBehaviour("BiasParameters", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<BiasParameters>), AS_CALL_CDECL_OBJFIRST);
 
+    // BigInt::BigInt() | File: ../Math/BigInt.h
+    engine->RegisterObjectBehaviour("BigInt", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<BigInt>), AS_CALL_CDECL_OBJFIRST);
+
     // BoundingBox::BoundingBox() noexcept | File: ../Math/BoundingBox.h
     engine->RegisterObjectBehaviour("BoundingBox", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<BoundingBox>), AS_CALL_CDECL_OBJFIRST);
 
@@ -252,7 +255,7 @@ void ASRegisterGeneratedDefaultConstructors(asIScriptEngine* engine)
     // ScreenModeParams::ScreenModeParams() | Implicitly-declared
     engine->RegisterObjectBehaviour("ScreenModeParams", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<ScreenModeParams>), AS_CALL_CDECL_OBJFIRST);
 
-    // ShaderParameter::ShaderParameter() = default | File: ../Graphics/ShaderVariation.h
+    // ShaderParameter::ShaderParameter() = default | File: ../GraphicsAPI/ShaderVariation.h
     engine->RegisterObjectBehaviour("ShaderParameter", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<ShaderParameter>), AS_CALL_CDECL_OBJFIRST);
 
     // ShadowBatchQueue::ShadowBatchQueue() | Implicitly-declared
@@ -318,7 +321,7 @@ void ASRegisterGeneratedDefaultConstructors(asIScriptEngine* engine)
     // VertexBufferMorph::VertexBufferMorph() | Implicitly-declared
     engine->RegisterObjectBehaviour("VertexBufferMorph", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<VertexBufferMorph>), AS_CALL_CDECL_OBJFIRST);
 
-    // VertexElement::VertexElement() noexcept | File: ../Graphics/GraphicsDefs.h
+    // VertexElement::VertexElement() noexcept | File: ../GraphicsAPI/GraphicsDefs.h
     engine->RegisterObjectBehaviour("VertexElement", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ASCompatibleConstructor<VertexElement>), AS_CALL_CDECL_OBJFIRST);
 
     // WindowModeParams::WindowModeParams() | Implicitly-declared

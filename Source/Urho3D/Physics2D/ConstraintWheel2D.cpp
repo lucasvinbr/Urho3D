@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 #include "../Precompiled.h"
 
@@ -53,8 +34,11 @@ void ConstraintWheel2D::RegisterObject(Context* context)
     URHO3D_ACCESSOR_ATTRIBUTE("Enable Motor", GetEnableMotor, SetEnableMotor, bool, false, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Max Motor Torque", GetMaxMotorTorque, SetMaxMotorTorque, float, 0.0f, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Motor Speed", GetMotorSpeed, SetMotorSpeed, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Frequency Hz", GetFrequencyHz, SetFrequencyHz, float, 2.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Damping Ratio", GetDampingRatio, SetDampingRatio, float, 0.7f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Stiffness", GetStiffness, SetStiffness, float, 0.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Damping", GetDamping, SetDamping, float, 0.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Enable Limit", GetEnableLimit, SetEnableLimit, bool, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Lower Translation", GetLowerTranslation, SetLowerTranslation, float, 0.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Upper Translation", GetUpperTranslation, SetUpperTranslation, float, 0.0f, AM_DEFAULT);
     URHO3D_COPY_BASE_ATTRIBUTES(Constraint2D);
 }
 
@@ -126,30 +110,30 @@ void ConstraintWheel2D::SetMotorSpeed(float motorSpeed)
     MarkNetworkUpdate();
 }
 
-void ConstraintWheel2D::SetFrequencyHz(float frequencyHz)
+void ConstraintWheel2D::SetStiffness(float stiffness)
 {
-    if (frequencyHz == jointDef_.frequencyHz)
+    if (stiffness == jointDef_.stiffness)
         return;
 
-    jointDef_.frequencyHz = frequencyHz;
+    jointDef_.stiffness = stiffness;
 
     if (joint_)
-        static_cast<b2WheelJoint*>(joint_)->SetSpringFrequencyHz(frequencyHz);
+        static_cast<b2WheelJoint*>(joint_)->SetStiffness(stiffness);
     else
         RecreateJoint();
 
     MarkNetworkUpdate();
 }
 
-void ConstraintWheel2D::SetDampingRatio(float dampingRatio)
+void ConstraintWheel2D::SetDamping(float damping)
 {
-    if (dampingRatio == jointDef_.dampingRatio)
+    if (damping == jointDef_.damping)
         return;
 
-    jointDef_.dampingRatio = dampingRatio;
+    jointDef_.damping = damping;
 
     if (joint_)
-        static_cast<b2WheelJoint*>(joint_)->SetSpringDampingRatio(dampingRatio);
+        static_cast<b2WheelJoint*>(joint_)->SetDamping(damping);
     else
         RecreateJoint();
 
@@ -169,6 +153,80 @@ b2JointDef* ConstraintWheel2D::GetJointDef()
     jointDef_.Initialize(bodyA, bodyB, ToB2Vec2(anchor_), ToB2Vec2(axis_));
 
     return &jointDef_;
+}
+
+
+bool ConstraintWheel2D::SetLinearStiffness(float frequencyHertz, float dampingRatio)
+{
+    if (!ownerBody_ || !otherBody_)
+        return false;
+
+    b2Body* bodyA = ownerBody_->GetBody();
+    b2Body* bodyB = otherBody_->GetBody();
+    if (!bodyA || !bodyB)
+        return false;
+
+    float stiffness, damping;
+    b2LinearStiffness(stiffness, damping, frequencyHertz, dampingRatio, bodyA, bodyB);
+
+    if (joint_)
+    {
+        static_cast<b2WheelJoint*>(joint_)->SetDamping(damping);
+        static_cast<b2WheelJoint*>(joint_)->SetStiffness(stiffness);
+    }
+    else
+    {
+        RecreateJoint();
+    }
+
+    MarkNetworkUpdate();
+
+    return true;
+}
+
+void ConstraintWheel2D::SetLowerTranslation(float lowerTranslation)
+{
+    if (lowerTranslation == jointDef_.lowerTranslation)
+        return;
+
+    jointDef_.lowerTranslation = lowerTranslation;
+
+    if (joint_)
+        static_cast<b2WheelJoint*>(joint_)->SetLimits(lowerTranslation, jointDef_.upperTranslation);
+    else
+        RecreateJoint();
+
+    MarkNetworkUpdate();
+}
+
+void ConstraintWheel2D::SetUpperTranslation(float upperTranslation)
+{
+    if (upperTranslation == jointDef_.upperTranslation)
+        return;
+
+    jointDef_.upperTranslation = upperTranslation;
+
+    if (joint_)
+        static_cast<b2WheelJoint*>(joint_)->SetLimits(jointDef_.lowerTranslation, upperTranslation);
+    else
+        RecreateJoint();
+
+    MarkNetworkUpdate();
+}
+
+void ConstraintWheel2D::SetEnableLimit(bool enableLimit)
+{
+    if (enableLimit == jointDef_.enableLimit)
+        return;
+
+    jointDef_.enableLimit = enableLimit;
+
+    if (joint_)
+        static_cast<b2WheelJoint*>(joint_)->EnableLimit(enableLimit);
+    else
+        RecreateJoint();
+
+    MarkNetworkUpdate();
 }
 
 }

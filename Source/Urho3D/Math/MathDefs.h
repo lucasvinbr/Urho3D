@@ -1,24 +1,5 @@
-//
-// Copyright (c) 2008-2022 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+// Copyright (c) 2008-2022 the Urho3D project
+// License: MIT
 
 /// \file
 
@@ -41,22 +22,22 @@ namespace Urho3D
 {
 
 #undef M_PI
-static const float M_PI = 3.14159265358979323846264338327950288f;
-static const float M_HALF_PI = M_PI * 0.5f;
-static const int M_MIN_INT = 0x80000000;
-static const int M_MAX_INT = 0x7fffffff;
-static const unsigned M_MIN_UNSIGNED = 0x00000000;
-static const unsigned M_MAX_UNSIGNED = 0xffffffff;
+inline constexpr float M_PI = 3.14159265358979323846264338327950288f;
+inline constexpr float M_HALF_PI = M_PI * 0.5f;
+inline constexpr i32 M_MIN_INT = 0x80000000;
+inline constexpr i32 M_MAX_INT = 0x7fffffff;
+inline constexpr u32 M_MIN_UNSIGNED = 0x00000000;
+inline constexpr u32 M_MAX_UNSIGNED = 0xffffffff;
 
-static const float M_EPSILON = 0.000001f;
-static const float M_LARGE_EPSILON = 0.00005f;
-static const float M_MIN_NEARCLIP = 0.01f;
-static const float M_MAX_FOV = 160.0f;
-static const float M_LARGE_VALUE = 100000000.0f;
-static const float M_INFINITY = (float)HUGE_VAL;
-static const float M_DEGTORAD = M_PI / 180.0f;
-static const float M_DEGTORAD_2 = M_PI / 360.0f;    // M_DEGTORAD / 2.f
-static const float M_RADTODEG = 1.0f / M_DEGTORAD;
+inline constexpr float M_EPSILON = 0.000001f;
+inline constexpr float M_LARGE_EPSILON = 0.00005f;
+inline constexpr float M_MIN_NEARCLIP = 0.01f;
+inline constexpr float M_MAX_FOV = 160.0f;
+inline constexpr float M_LARGE_VALUE = 100000000.0f;
+inline constexpr float M_INFINITY = std::numeric_limits<float>::infinity();
+inline constexpr float M_DEGTORAD = M_PI / 180.0f;
+inline constexpr float M_DEGTORAD_2 = M_PI / 360.0f;    // M_DEGTORAD / 2.f
+inline constexpr float M_RADTODEG = 1.0f / M_DEGTORAD;
 
 /// Intersection test result.
 enum Intersection
