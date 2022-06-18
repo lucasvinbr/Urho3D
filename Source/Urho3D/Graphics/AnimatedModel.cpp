@@ -20,6 +20,29 @@
 // THE SOFTWARE.
 //
 
+/*The MIT License (MIT)
+
+Lumak, Copyright (c) 2018
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
@@ -83,7 +106,8 @@ AnimatedModel::AnimatedModel(Context* context) :
     isMaster_(true),
     loading_(false),
     assignBonesPending_(false),
-    forceAnimationUpdate_(false)
+    forceAnimationUpdate_(false),
+    ragdollRecovery_(false)
 {
 }
 
@@ -123,6 +147,7 @@ void AnimatedModel::RegisterObject(Context* context)
         .SetMetadata(AttributeMetadata::P_VECTOR_STRUCT_ELEMENTS, animationStatesStructureElementNames);
     URHO3D_ACCESSOR_ATTRIBUTE("Morphs", GetMorphsAttr, SetMorphsAttr, PODVector<unsigned char>, Variant::emptyBuffer,
         AM_DEFAULT | AM_NOEDIT);
+    URHO3D_ATTRIBUTE("Ragdoll Recovery", bool, ragdollRecovery_, false, AM_DEFAULT | AM_NOEDIT);
 }
 
 bool AnimatedModel::Load(Deserializer& source)
@@ -1286,7 +1311,10 @@ void AnimatedModel::ApplyAnimation()
     // (first AnimatedModel in a node)
     if (isMaster_)
     {
-        skeleton_.ResetSilent();
+        if (!ragdollRecovery_)
+        {
+            skeleton_.ResetSilent();
+        }
         for (Vector<SharedPtr<AnimationState> >::Iterator i = animationStates_.Begin(); i != animationStates_.End(); ++i)
             (*i)->Apply();
 

@@ -20,6 +20,29 @@
 // THE SOFTWARE.
 //
 
+/*The MIT License (MIT)
+
+Lumak, Copyright (c) 2018
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
@@ -98,9 +121,20 @@ void AnimationController::Update(float timeStep)
             remove = true;
         else
         {
-            // Advance the animation
-            if (ctrl.speed_ != 0.0f)
-                state->AddTime(ctrl.speed_ * timeStep);
+            if (ctrl.ragdollRecovery_)
+            {
+                ctrl.ragdollTimeElapsed_ += timeStep;
+                if (ctrl.ragdollTimeElapsed_ > ctrl.ragdollRecoverTime_)
+                {
+                    ctrl.ragdollRecovery_ = false;
+                }
+            }
+            else
+            {
+                // Advance the animation
+                if (ctrl.speed_ != 0.0f)
+                    state->AddTime(ctrl.speed_ * timeStep);
+            }
 
             float targetWeight = ctrl.targetWeight_;
             float fadeTime = ctrl.fadeTime_;
@@ -110,6 +144,11 @@ void AnimationController::Update(float timeStep)
             {
                 targetWeight = 0.0f;
                 fadeTime = ctrl.autoFadeTime_;
+            }
+
+            if (ctrl.ragdollRecovery_ && ctrl.ragdollRecoverTime_ > 0.0f)
+            {
+                fadeTime = ctrl.ragdollRecoverTime_ * 10.0f;
             }
 
             // Process weight fade
@@ -127,6 +166,11 @@ void AnimationController::Update(float timeStep)
                 }
                 else
                     state->SetWeight(targetWeight);
+            }
+
+            if (ctrl.ragdollRecovery_ && currentWeight >= 1.0f)
+            {
+                ctrl.ragdollRecovery_ = false;
             }
 
             // Remove if weight zero and target weight zero
@@ -189,6 +233,7 @@ bool AnimationController::Play(const String& name, unsigned char layer, bool loo
     state->SetLooped(looped);
     animations_[index].targetWeight_ = 1.0f;
     animations_[index].fadeTime_ = fadeInTime;
+    animations_[index].ragdollRecovery_ = false;
 
     MarkNetworkUpdate();
     return true;
@@ -423,6 +468,37 @@ bool AnimationController::SetAutoFade(const String& name, float fadeOutTime)
 
     animations_[index].autoFadeTime_ = Max(fadeOutTime, 0.0f);
     MarkNetworkUpdate();
+    return true;
+}
+
+bool AnimationController::SetRagdollRecovery(const String& name, float recoverTime)
+{
+    unsigned index;
+    AnimationState* state;
+    FindAnimation(name, index, state);
+    if (index == M_MAX_UNSIGNED)
+        return false;
+
+    animations_[index].targetWeight_ = 1.0f;
+    state->SetWeight(0.0f);
+    animations_[index].ragdollRecovery_ = true;
+    animations_[index].ragdollRecoverTime_ = recoverTime;
+    animations_[index].ragdollTimeElapsed_ = 0.0f;
+
+    return true;
+}
+
+bool AnimationController::RemoveOtherRagdollRecoveryAnimation(const String& name)
+{
+    unsigned index;
+    AnimationState* state;
+    FindAnimation(name, index, state);
+    if (index == M_MAX_UNSIGNED)
+        return false;
+
+    if (state)
+        RemoveAnimationState(state);
+    animations_.Erase(index);
     return true;
 }
 

@@ -2,3 +2,5 @@ Docs/* linguist-documentation
 Source/ThirdParty/* linguist-vendored
 bin/Data/Fonts/* linguist-vendored
 *.h linguist-language=C++
+# Auto detect text files and perform LF normalization
+* text=auto

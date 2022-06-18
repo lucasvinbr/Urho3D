@@ -20,6 +20,29 @@
 // THE SOFTWARE.
 //
 
+/*The MIT License (MIT)
+
+Lumak, Copyright (c) 2018 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #pragma once
 
 #include "../IO/VectorBuffer.h"
@@ -49,7 +72,10 @@ struct URHO3D_API AnimationControl
         setWeight_(0),
         setTimeRev_(0),
         setWeightRev_(0),
-        removeOnCompletion_(true)
+        removeOnCompletion_(true),
+        ragdollRecovery_(false),
+        ragdollRecoverTime_(0.0f),
+        ragdollTimeElapsed_(0.0f)
     {
     }
 
@@ -79,6 +105,11 @@ struct URHO3D_API AnimationControl
     unsigned char setWeightRev_;
     /// Sets whether this should automatically be removed when it finishes playing.
     bool removeOnCompletion_;
+
+    /// ragdoll
+    bool ragdollRecovery_;
+    float ragdollRecoverTime_;
+    float ragdollTimeElapsed_;
 };
 
 /// %Component that drives an AnimatedModel's animations.
@@ -190,6 +221,10 @@ public:
     /// Return node animation states attribute.
     VariantVector GetNodeAnimationStatesAttr() const;
 
+    /// ragdoll recovery
+    bool SetRagdollRecovery(const String& name, float recoverTime = 0.5f);
+    bool RemoveOtherRagdollRecoveryAnimation(const String& name);
+
 protected:
     /// Handle scene being assigned.
     void OnSceneSet(Scene* scene) override;
@@ -210,6 +245,11 @@ private:
     Vector<SharedPtr<AnimationState> > nodeAnimationStates_;
     /// Attribute buffer for network replication.
     mutable VectorBuffer attrBuffer_;
+
+    // ragdoll recovery
+    bool ragdollRecovery_;
+    float ragdollRecoverTime_;
+    float ragdollTimeElapsed_;
 };
 
 }
