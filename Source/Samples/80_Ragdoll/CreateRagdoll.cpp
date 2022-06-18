@@ -72,37 +72,37 @@ void CreateRagdoll::InitContraints()
     CreateRagdollBone("", SHAPE_SPHERE, Vector3(0.2f, 0.2f, 0.2f), Vector3(0.0f, 0.0f, -0.2f),
         Quaternion(0.0f, 0.0f, 0.0f), 0.5f);
 
-    CreateRagdollBone("Bip01_L_Foot", SHAPE_SPHERE, Vector3(0.1f, 0.1f, 0.1f), Vector3(0.0f, 0.0f, 0.0f),
+    CreateRagdollBone("ball_l", SHAPE_SPHERE, Vector3(0.1f, 0.1f, 0.1f), Vector3(0.0f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 0.0f), 0.01f);
 
     // Create RigidBody & CollisionShape components to bones
-    CreateRagdollBone("Bip01_Pelvis", SHAPE_BOX, Vector3(0.3f, 0.2f, 0.25f), Vector3(0.0f, 0.0f, 0.0f),
+    CreateRagdollBone("pelvis", SHAPE_BOX, Vector3(0.3f, 0.2f, 0.25f), Vector3(0.0f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 0.0f));
-    CreateRagdollBone("Bip01_Spine2", SHAPE_BOX, Vector3(0.35f, 0.2f, 0.3f), Vector3(0.0f, 0.0f, 0.0f),
+    CreateRagdollBone("spine_02", SHAPE_BOX, Vector3(0.35f, 0.2f, 0.3f), Vector3(0.0f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 0.0f));
-    CreateRagdollBone("Bip01_L_Thigh", SHAPE_CAPSULE, Vector3(0.175f, 0.45f, 0.175f), Vector3(0.25f, 0.0f, 0.0f),
+    CreateRagdollBone("thigh_l", SHAPE_CAPSULE, Vector3(0.175f, 0.45f, 0.175f), Vector3(0.25f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_R_Thigh", SHAPE_CAPSULE, Vector3(0.175f, 0.45f, 0.175f), Vector3(0.25f, 0.0f, 0.0f),
+    CreateRagdollBone("thigh_r", SHAPE_CAPSULE, Vector3(0.175f, 0.45f, 0.175f), Vector3(0.25f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_L_Calf", SHAPE_CAPSULE, Vector3(0.15f, 0.55f, 0.15f), Vector3(0.25f, 0.0f, 0.0f),
+    CreateRagdollBone("calf_l", SHAPE_CAPSULE, Vector3(0.15f, 0.55f, 0.15f), Vector3(0.25f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_R_Calf", SHAPE_CAPSULE, Vector3(0.15f, 0.55f, 0.15f), Vector3(0.25f, 0.0f, 0.0f),
+    CreateRagdollBone("calf_r", SHAPE_CAPSULE, Vector3(0.15f, 0.55f, 0.15f), Vector3(0.25f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_Head", SHAPE_BOX, Vector3(0.2f, 0.2f, 0.2f), Vector3(0.1f, 0.0f, 0.0f),
+    CreateRagdollBone("head", SHAPE_BOX, Vector3(0.2f, 0.2f, 0.2f), Vector3(0.1f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 0.0f));
-    CreateRagdollBone("Bip01_L_UpperArm", SHAPE_CAPSULE, Vector3(0.15f, 0.35f, 0.15f), Vector3(0.1f, 0.0f, 0.0f),
+    CreateRagdollBone("upperarm_l", SHAPE_CAPSULE, Vector3(0.15f, 0.35f, 0.15f), Vector3(0.1f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_R_UpperArm", SHAPE_CAPSULE, Vector3(0.15f, 0.35f, 0.15f), Vector3(0.1f, 0.0f, 0.0f),
+    CreateRagdollBone("upperarm_r", SHAPE_CAPSULE, Vector3(0.15f, 0.35f, 0.15f), Vector3(0.1f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_L_Forearm", SHAPE_CAPSULE, Vector3(0.125f, 0.4f, 0.125f), Vector3(0.2f, 0.0f, 0.0f),
+    CreateRagdollBone("lowerarm_l", SHAPE_CAPSULE, Vector3(0.125f, 0.4f, 0.125f), Vector3(0.2f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
-    CreateRagdollBone("Bip01_R_Forearm", SHAPE_CAPSULE, Vector3(0.125f, 0.4f, 0.125f), Vector3(0.2f, 0.0f, 0.0f),
+    CreateRagdollBone("lowerarm_r", SHAPE_CAPSULE, Vector3(0.125f, 0.4f, 0.125f), Vector3(0.2f, 0.0f, 0.0f),
         Quaternion(0.0f, 0.0f, 90.0f));
 
     //=====================
     // create constraints
     //=====================
-    Node *bipnode = node_->GetChild("Bip01_L_Foot", true);
+    Node *bipnode = node_->GetChild("ball_l", true);
     float yang = bipnode->GetWorldRotation().YawAngle();
     Quaternion qnorm(-yang, Vector3(0,1,0));
 
@@ -118,32 +118,32 @@ void CreateRagdoll::InitContraints()
     constraint->SetLowLimit(Vector2::ZERO);
     constraint->SetERP(0.2f);
 
-    CreateRagdollConstraint("", "Bip01_L_Foot", CONSTRAINT_CONETWIST, qnorm * Vector3::RIGHT, Vector3::RIGHT,
+    CreateRagdollConstraint("", "ball_l", CONSTRAINT_CONETWIST, qnorm * Vector3::RIGHT, Vector3::RIGHT,
         Vector2(0.0f, 50.0f), Vector2::ZERO);
 
-    CreateRagdollConstraint("Bip01_L_Foot", "Bip01_L_Calf", CONSTRAINT_HINGE, Vector3::UP, Vector3::FORWARD,
+    CreateRagdollConstraint("ball_l", "calf_l", CONSTRAINT_POINT, Vector3::UP, Vector3::FORWARD,
         Vector2(0.0f, 0.0f), Vector2(0.01f, 0.0f));
 
     // Create Constraints between bones
-    CreateRagdollConstraint("Bip01_Spine2", "Bip01_Pelvis", CONSTRAINT_HINGE, Vector3::FORWARD, Vector3::FORWARD,
+    CreateRagdollConstraint("spine_02", "pelvis", CONSTRAINT_HINGE, Vector3::FORWARD, Vector3::FORWARD,
         Vector2(45.0f, 0.0f), Vector2(-10.0f, 0.0f));
-    CreateRagdollConstraint("Bip01_L_Thigh", "Bip01_Pelvis", CONSTRAINT_CONETWIST, Vector3::BACK, Vector3::FORWARD,
+    CreateRagdollConstraint("thigh_l", "pelvis", CONSTRAINT_CONETWIST, Vector3::BACK, Vector3::FORWARD,
         Vector2(45.0f, 45.0f), Vector2::ZERO);
-    CreateRagdollConstraint("Bip01_R_Thigh", "Bip01_Pelvis", CONSTRAINT_CONETWIST, Vector3::BACK, Vector3::FORWARD,
+    CreateRagdollConstraint("thigh_r", "pelvis", CONSTRAINT_CONETWIST, Vector3::BACK, Vector3::FORWARD,
         Vector2(45.0f, 45.0f), Vector2::ZERO);
-    CreateRagdollConstraint("Bip01_L_Calf", "Bip01_L_Thigh", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
+    CreateRagdollConstraint("calf_l", "thigh_l", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
         Vector2(90.0f, 0.0f), Vector2::ZERO);
-    CreateRagdollConstraint("Bip01_R_Calf", "Bip01_R_Thigh", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
+    CreateRagdollConstraint("calf_r", "thigh_r", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
         Vector2(90.0f, 0.0f), Vector2::ZERO);
-    CreateRagdollConstraint("Bip01_Head", "Bip01_Spine2", CONSTRAINT_CONETWIST, Vector3::LEFT, Vector3::LEFT,
+    CreateRagdollConstraint("head", "spine_02", CONSTRAINT_CONETWIST, Vector3::LEFT, Vector3::LEFT,
         Vector2(0.0f, 30.0f), Vector2::ZERO);
-    CreateRagdollConstraint("Bip01_L_UpperArm", "Bip01_Spine2", CONSTRAINT_CONETWIST, Vector3::DOWN, Vector3::UP,
+    CreateRagdollConstraint("upperarm_l", "spine_02", CONSTRAINT_CONETWIST, Vector3::DOWN, Vector3::UP,
         Vector2(45.0f, 45.0f), Vector2::ZERO, false);
-    CreateRagdollConstraint("Bip01_R_UpperArm", "Bip01_Spine2", CONSTRAINT_CONETWIST, Vector3::DOWN, Vector3::UP,
+    CreateRagdollConstraint("upperarm_r", "spine_02", CONSTRAINT_CONETWIST, Vector3::DOWN, Vector3::UP,
         Vector2(45.0f, 45.0f), Vector2::ZERO, false);
-    CreateRagdollConstraint("Bip01_L_Forearm", "Bip01_L_UpperArm", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
+    CreateRagdollConstraint("lowerarm_l", "upperarm_l", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
         Vector2(90.0f, 0.0f), Vector2::ZERO);
-    CreateRagdollConstraint("Bip01_R_Forearm", "Bip01_R_UpperArm", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
+    CreateRagdollConstraint("lowerarm_r", "upperarm_r", CONSTRAINT_HINGE, Vector3::BACK, Vector3::BACK,
         Vector2(90.0f, 0.0f), Vector2::ZERO);
 
     // enable animation
@@ -203,11 +203,12 @@ void CreateRagdoll::EnableAnimation(bool enable)
         if (enable)
         {
             animatedModel->SetRagdollRecovery(true);
-            animCtrl->PlayExclusive("Models/Jack_Walk.ani", 0, true, 0.4f);
-            animCtrl->SetRagdollRecovery("Models/Jack_Walk.ani", 0.4f);
+            animCtrl->PlayExclusive("Models/Genericus/test_getup_belly.ani", 0, false, 0.75f);
+            animCtrl->SetRagdollRecovery("Models/Genericus/test_stand_idle_crazyarms.ani", 0.75f);
         }
         else
         {
+            animCtrl->PlayExclusive("Models/Genericus/test_stand_idle_crazyarms.ani", 0, false, 0.0f);
             animatedModel->SetRagdollRecovery(false);
         }
     }
@@ -328,7 +329,7 @@ void CreateRagdoll::HandleNodeCollision(StringHash eventType, VariantMap& eventD
 void CreateRagdoll::DebugDraw()
 {
     DebugRenderer *dbgRenderer = node_->GetScene()->GetComponent<DebugRenderer>();
-    Node *boneNode = node_->GetChild("Bip01_L_Foot", true);
+    Node *boneNode = node_->GetChild("ball_l", true);
     Vector3 pos = boneNode->GetWorldPosition();
 
     Constraint* constraint = boneNode->GetComponent<Constraint>();

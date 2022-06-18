@@ -70,7 +70,7 @@ void Ragdolls::Setup()
     engineParameters_["Headless"]      = false;
     engineParameters_["WindowWidth"]   = 1280; 
     engineParameters_["WindowHeight"]  = 720;
-    engineParameters_["ResourcePaths"] = "Data;CoreData;Data/Ragdoll;";
+    engineParameters_["ResourcePaths"] = "Data;CoreData";
 }
 
 void Ragdolls::Start()
@@ -156,12 +156,12 @@ void Ragdolls::CreateScene()
     {
         for (int x = -4; x <= 4; ++x)
         {
-            nodeModel_ = scene_->CreateChild("Jack");
+            nodeModel_ = scene_->CreateChild("Generik");
             nodeModel_->SetPosition(Vector3(x * 5.0f, 0.0f, z * 5.0f));
             nodeModel_->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
             AnimatedModel* modelObject = nodeModel_->CreateComponent<AnimatedModel>();
-            modelObject->SetModel(cache->GetResource<Model>("Models/Jack.mdl"));
-            modelObject->SetMaterial(cache->GetResource<Material>("Materials/JackGreen.xml"));
+            modelObject->SetModel(cache->GetResource<Model>("Models/Genericus/Genericus_High-poly.mdl"));
+            modelObject->SetMaterial(cache->GetResource<Material>("Materials/Genericus/Unlit Template.xml"));
             modelObject->SetCastShadows(true);
             // Set the model to also update when invisible to avoid staying invisible when the model should come into
             // view, but does not as the bounding box is not updated
@@ -186,7 +186,7 @@ void Ragdolls::CreateScene()
             nodeModel_->CreateComponent<CreateRagdoll>();
             nodeModel_->CreateComponent<AnimationController>();
             AnimationController *animCtrl = nodeModel_->GetComponent<AnimationController>();
-            animCtrl->PlayExclusive("Models/Jack_Walk.ani", 0, true, 0.2f);
+            animCtrl->PlayExclusive("Models/Genericus/test_stand_idle.ani", 0, true, 0.0f);
         }
     }
 
@@ -286,8 +286,8 @@ void Ragdolls::MoveCamera(float timeStep)
         {
             nodeModel_->GetComponent<AnimatedModel>(true)->SetRagdollRecovery(true);
             AnimationController *animCtrl = nodeModel_->GetComponent<AnimationController>(true);
-            animCtrl->PlayExclusive("Models/Jack_Walk.ani", 0, true, 0.4f);
-            animCtrl->SetRagdollRecovery("Models/Jack_Walk.ani", 0.4f);
+            animCtrl->PlayExclusive("Models/Genericus/test_getup_back.ani", 0, true, 0.4f);
+            animCtrl->SetRagdollRecovery("Models/Genericus/test_getup_back.ani", 0.4f);
         }
 
         //File loadFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/Ragdolls.xml", FILE_READ);
