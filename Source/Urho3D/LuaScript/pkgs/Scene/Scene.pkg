@@ -25,6 +25,7 @@ class Scene : public Node
     tolua_outside bool SceneSaveXML @ SaveXML(File* dest, const String indentation = "\t") const;
     tolua_outside bool SceneLoadXML @ LoadXML(const String fileName);
     tolua_outside bool SceneSaveXML @ SaveXML(const String fileName, const String indentation = "\t") const;
+	tolua_outside bool SceneLoadXML @ LoadXML(const XMLElement& element);
     tolua_outside bool SceneLoadJSON @ LoadJSON(File* source);
     tolua_outside bool SceneSaveJSON @ SaveJSON(File* dest, const String indentation = "\t") const;
     tolua_outside bool SceneLoadJSON @ LoadJSON(const String fileName);
@@ -169,6 +170,11 @@ static bool SceneSaveXML(const Scene* scene, const String& fileName, const Strin
     if (!file.IsOpen())
         return false;
     return scene->SaveXML(file, indentation);
+}
+
+static bool SceneLoadXML(Scene* scene, const XMLElement& element)
+{
+    return element ? scene->LoadXML(element) : false;
 }
 
 static bool SceneLoadJSON(Scene* scene, File* file)
