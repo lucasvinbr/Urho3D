@@ -34,7 +34,7 @@ class Scene : public Node
     tolua_outside Node* SceneInstantiate @ Instantiate(const String fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
     tolua_outside Node* SceneInstantiateXML @ InstantiateXML(File* source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
     tolua_outside Node* SceneInstantiateXML @ InstantiateXML(const String fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
-	tolua_outside Node* SceneInstantiateXML @ InstantiateXML(const XMLElement& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
+	tolua_outside Node* SceneInstantiateXML @ InstantiateXML(const XMLElement& element, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
     tolua_outside Node* SceneInstantiateJSON @ InstantiateJSON(const String fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED);
 
     bool LoadAsync(File* file, LoadMode mode = LOAD_SCENE_AND_RESOURCES);
@@ -235,9 +235,9 @@ static Node* SceneInstantiateXML(Scene* scene, const String& fileName, const Vec
     return file.IsOpen() ? scene->InstantiateXML(file, position, rotation, mode) : 0;
 }
 
-static Node* SceneInstantiateXML(Scene* scene, const XMLElement& source, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
+static Node* SceneInstantiateXML(Scene* scene, const XMLElement& element, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
-    return source ? scene->InstantiateXML(source, position, rotation, mode) : 0;
+    return element ? scene->InstantiateXML(element, position, rotation, mode) : 0;
 }
 
 static Node* SceneInstantiateJSON(Scene* scene, const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode)
